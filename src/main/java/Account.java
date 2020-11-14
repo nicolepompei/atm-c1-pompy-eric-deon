@@ -41,7 +41,7 @@ public class Account {
         if (this.balance >= amount && amount > 0) {
             this.setBalance(this.getBalance() - amount, String.format("Transfer to %s,", transferAccount.getAccountID()));
             transferAccount.setBalance(transferAccount.getBalance() + amount, String.format("Transfer from %s", this.getAccountID()));
-         } else Console.println("Sorry, insufficient funds to complete the transfer.");
+         } //else Console.println("Sorry, insufficient funds to complete the transfer.");
     }
 
     //withdraw money from current account. this method:
@@ -116,7 +116,7 @@ public class Account {
     //add transaction report to transaction history (master of all transaction history)
     public void addTransactionReportToTransactionHistory(String transactionReport){
         transactionHistory.add(transactionReport);
-        Console.println("\n\n" + transactionReport + "\n\n");
+        //Console.println("\n\n" + transactionReport + "\n\n");
     }
 
     //get transaction history
