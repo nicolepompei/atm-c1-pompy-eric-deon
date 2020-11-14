@@ -11,6 +11,10 @@ public class AccountMap {
         private Map<Integer, Account> accounts;
         private  Integer nextId;
 
+
+        //the collection of accounts in the ATM is stored in a hashmap. it's responsibility is to maintain a collection of accounts for the bank.
+        //an account number is a unique key used to access the account
+        //main function: maintain a collection of things and provide an interface for adding and getting access to those things
         public AccountMap(){
             this.accounts = new HashMap<>();
             this.nextId = 0;

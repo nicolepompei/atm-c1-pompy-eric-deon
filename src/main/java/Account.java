@@ -22,7 +22,8 @@ public class Account {
         this.transactionHistory = new ArrayList<>();
     }
 
-    //balance setter (deposit)
+    //verifies that the amount being deposited is greater than 0
+    //updates the balance of the current account object by getting it's current balance and adding the amount
     public void deposit(Double amount) {
         if(amount > 0.0)
         this.setBalance(this.getBalance() + amount, String.format("Deposit to %s", this.getAccountID()));
@@ -94,8 +95,8 @@ public class Account {
 
 
     //set balance enhanced that sets it by transaction type (two params, balance and transaction type)
-    //to set a new balance need to
-    //used for transferring money
+    //the transactopnType parameter allows a description to be added to the transaction report so it's not just numbers (acts as a label)
+
 
     public void setBalance(Double balance, String transactionType){
     Double oldBalance = getBalance();
