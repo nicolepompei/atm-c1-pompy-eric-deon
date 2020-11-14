@@ -4,7 +4,7 @@ import java.util.Map;
 
 //This class creates accounts and generates their ID and then files them into a map
 //which allows easy access to return. chose map b/c of key value pair for Id and
-// account pairing functionaliy
+// account pairing functionality
 
 
 public class AccountMap {
@@ -51,7 +51,7 @@ public class AccountMap {
             return nextId;
     }
 
-    public void setNexxtId(Integer nextId){
+    public void setNextId(Integer nextId){
             this.nextId = nextId;
     }
 
