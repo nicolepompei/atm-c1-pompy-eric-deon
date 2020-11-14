@@ -12,13 +12,13 @@ public class AccountTest {
     @Test
     public void testA0() {
         Account a = new Account(0.0);
-        assertEquals(0.0, a.balance(), 0.0001);
+        assertEquals(0.0, a.getBalance(), 0.0001);
     }
 
     @Test
     public void testA00() {
         Account a = new Account(10.0);
-        assertEquals(10.0, a.balance(), 0.0001);
+        assertEquals(10.0, a.getBalance(), 0.0001);
     }
 
     @Test
@@ -37,14 +37,14 @@ public class AccountTest {
     public void testA1() {
         Account a = new Account(0.0);
         a.deposit(100.0);
-        assertEquals(100.0, a.balance(), 0.0001);
+        assertEquals(100.0, a.getBalance(), 0.0001);
     }
 
     @Test
     public void testA2() {
         Account a = new Account(10.0);
         a.deposit(100.0);
-        assertEquals(110.0, a.balance(), 0.0001);
+        assertEquals(110.0, a.getBalance(), 0.0001);
     }
 
     @Test
@@ -66,8 +66,8 @@ public class AccountTest {
         Account a = new Account(10.0);
         Account b = new Account(0.0);
         a.transfer(b, 10.0);
-        assertEquals(0.0, a.balance(), 0.0001);
-        assertEquals(10.0, b.balance(), 0.0001);
+        assertEquals(0.0, a.getBalance(), 0.0001);
+        assertEquals(10.0, b.getBalance(), 0.0001);
     }
 
     @Test
@@ -75,8 +75,8 @@ public class AccountTest {
         Account a = new Account(10.0);
         Account b = new Account(0.0);
         a.transfer(b, 100.0); // nothing should happen
-        assertEquals(10.0, a.balance(), 0.0001);
-        assertEquals(0.0, b.balance(), 0.0001);
+        assertEquals(10.0, a.getBalance(), 0.0001);
+        assertEquals(0.0, b.getBalance(), 0.0001);
     }
 
 
