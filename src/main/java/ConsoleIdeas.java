@@ -2,7 +2,7 @@ import java.util.HashMap;
 
 public class ConsoleIdeas {
 
-   AccountMap accountMap = new AccountMap();
+   /*AccountMap accountMap = new AccountMap();
    private String currentUserName = "";
 
    //helper function in the console logic that helps to rertrieve the current user from the master list/map of users
@@ -30,6 +30,6 @@ public class ConsoleIdeas {
 
     }
 
-
+*/
 
 }

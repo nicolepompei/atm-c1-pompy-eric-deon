@@ -5,10 +5,9 @@ import java.util.Random;
 public class Users {
 
     private Integer password = 0;
-    private ArrayList<Users> userList = new ArrayList<Users>();
-    //private HashMap<Users, ArrayList<Accounts>> userList = new HashMap<>();
+    private HashMap<Users, ArrayList<Account>> userList = new HashMap<>();
     private String userName = "";
-    //private ArrayList<Accounts> userAccs;
+    private ArrayList<Account> userAccs;
 
     public Users(){
 
@@ -40,39 +39,49 @@ public class Users {
         return userName;
     }
 
-    public void addUser(Users user){
-        userList.add(user);
+    public void updateUserAcc(Users user){
+        userList.put(user, userAccs);
     }
 
-    public ArrayList<Users> getUserList(){//Will become obsolete
-        return userList;
+    public void addAccounts(Account acc){
+        userAccs.add(acc);
     }
 
-    public Boolean checkUserName(String name){
-        for(Users user : userList){
-            if(user.getUserName().equals(name)) {
-                return true;
+    public Boolean checkUserName(String name){//I dont understand how return true wont work but I guess java hates me
+        Boolean[] truthy = {false};
+
+        userList.forEach((users, acc) -> {
+            if(users.getUserName().equals(name)) {
+                truthy[0] = true;
             }
-        }
-        return false;
+        });
+        return truthy[0];
     }
 
     public Boolean checkPassword(Integer pass){
-        for(Users user : userList){
-            if(user.getPassword() == pass) {
-                return true;
+        Boolean[] truthy = {false};
+
+        userList.forEach((users, acc) -> {
+            if(users.getPassword().equals(pass)) {
+                truthy[0] = true;
             }
-        }
-        return false;
+        });
+        return truthy[0];
     }
 
-    /*
-    public void addAccounts(Accounts account){
-        userAccs.add(account);
+    public Users getUserByName(String name){
+        Users[] output = new Users[1];
+
+        userList.forEach((users, acc) -> {
+            if(users.getUserName().equals(name)) {
+                output[0] = users;
+            }
+        });
+        return output[0];
     }
 
-    public void addToUserList(Users user){
-        userList.map(user, userAccs);
+    public void clearAccList(){
+        userAccs.clear();
     }
-    */
+
 }

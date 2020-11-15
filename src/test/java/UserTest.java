@@ -31,9 +31,9 @@ public class UserTest {
         String actual = "Bob";
         Users user = new Users(actual);
 
-        user.addUser(user);
+        user.updateUserAcc(user);
 
-        Users exp = user.getUserList().get(0);
+        Users exp = user.getUserByName(actual);
 
         String expected = exp.getUserName();
 
@@ -46,18 +46,14 @@ public class UserTest {
         Users user2 = new Users("Joe");
         Users user3 = new Users("Anita");
 
-        user1.addUser(user1);
-        user1.addUser(user2);
-        user1.addUser(user3);
+        user1.updateUserAcc(user1);
+        user1.updateUserAcc(user2);
+        user1.updateUserAcc(user3);
 
-        String actual = "Joe";
-        String expected = "";
+        Boolean actual = true;
 
-        for(Users user : user1.getUserList()){
-            if(user.getUserName().equals(actual)) {
-                expected = user.getUserName();
-            }
-        }
+
+        Boolean expected = user1.checkUserName("Joe");
 
         Assert.assertEquals(expected, actual);
     }
@@ -65,7 +61,7 @@ public class UserTest {
     @Test
     public void testPassAuth(){
         Users users = new Users("Jim");
-        users.addUser(users);
+        users.updateUserAcc(users);
 
         Integer pass = users.getPassword();
         Boolean actual = true;
@@ -79,7 +75,7 @@ public class UserTest {
     public void testNameAuth(){
         String name = "Doug";
         Users users = new Users(name);
-        users.addUser(users);
+        users.updateUserAcc(users);
 
         Boolean actual = true;
 
