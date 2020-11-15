@@ -2,7 +2,7 @@
 import org.junit.Assert;
 import org.junit.Test;
 
-public class UsersTest{
+public class UserTest {
 
     @Test
     public void testGeneratePass(){
