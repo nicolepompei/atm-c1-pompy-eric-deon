@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Console {
-// Trying to fix this
+
 
     public void startAtm() {
         Scanner scanner = new Scanner(System.in);
@@ -125,14 +125,14 @@ public class Console {
                     Integer transferOptions = scanner.nextInt();
 
                     if (transferOptions == 1) {
-                        System.out.println("\n You current Checking account balance is: " + "$" + currentCheckingBalance);
+                        System.out.println("\n Your current Checking account balance is: " + "$" + currentCheckingBalance);
                         System.out.println("\n How much would you like to transfer to Savings Account?");
                         Double transferMoney = scanner.nextDouble();
                         // transferToAccount.transferMoney(transferMoney);
                         System.out.println("\n Your Savings Account Balance is now: " + "$" + currentSavingsBalance);
 
                     } else if (transferOptions == 2) {
-                        System.out.println("\n You current Checking account balance is: " + "$" + currentCheckingBalance);
+                        System.out.println("\n Your current Checking account balance is: " + "$" + currentCheckingBalance);
                         System.out.println("\n How much would you like to transfer to Investment Account?");
                         Double transferMoney = scanner.nextDouble();
                         // transferToAccount.transferMoney(transferMoney);
@@ -146,20 +146,20 @@ public class Console {
                         System.out.println("\n Your Checking Account Balance is now: " + "$" + currentCheckingBalance);
 
                     } else if (transferOptions == 4) {
-                        System.out.println("\n You current Savings account balance is: " + "$" + currentSavingsBalance);
+                        System.out.println("\n Your current Savings account balance is: " + "$" + currentSavingsBalance);
                         System.out.println("\n How much would you like to transfer to Investment Account?");
                         Double transferMoney = scanner.nextDouble();
                         // transferToAccount.transferMoney(transferMoney);
                         System.out.println("\n Your Investment Account Balance is now: " + "$" + currentInvestmentBalance);
 
                     } else if (transferOptions == 5) {
-                        System.out.println("\n You current Investment account balance is: " + "$" + currentInvestmentBalance);
+                        System.out.println("\n Your current Investment account balance is: " + "$" + currentInvestmentBalance);
                         System.out.println("\n How much would you like to transfer to Checking Account?");
                         Double transferMoney = scanner.nextDouble();
                         // transferToAccount.transferMoney(transferMoney);
                         System.out.println("\n Your Checking Balance is now: " + "$" + currentCheckingBalance);
                     } else if (transferOptions == 6) {
-                        System.out.println("\n You current Investment account balance is: " + "$" + currentInvestmentBalance);
+                        System.out.println("\n Your current Investment account balance is: " + "$" + currentInvestmentBalance);
                         System.out.println("\n How much would you like to transfer to Savings Account?");
                         Double transferMoney = scanner.nextDouble();
                         // transferToAccount.transferMoney(transferMoney);
@@ -168,6 +168,68 @@ public class Console {
                     } else if (transferOptions == 7) {
                         // Takes you back to Main Menu
                     }
+                    break;
+                    // Close Account
+                case 6:
+                    System.out.println("\n Select which account you would like to close: \n (1) Checking \n (2) Savings Account (3) Investment Account \n (4) Go back to Main Menu");
+                    Integer closingAccOption = scanner.nextInt();
+
+                    if (closingAccOption == 1){
+                        System.out.println("\n We are so sorry that you want to close your checking account.");
+                        System.out.println("\n Are you sure you want to close this account?");
+                        if (closingAccOption.equals("Yes")){
+                            String closingAccount = scanner.nextLine();
+                            System.out.println("\n Checking account being closed");
+
+                        } else if (closingAccOption.equals("No")){
+                            String closingAccount = scanner.nextLine();
+                            System.out.println("\n Your account will remain open, thank you.");
+                        }
+                    } else if (closingAccOption == 2){
+                        System.out.println("\n We are so sorry that you want to close your savings account.");
+                        System.out.println("\n Are you sure you want to close this account?");
+                        if (closingAccOption.equals("Yes")){
+                            String closingAccount = scanner.nextLine();
+                            System.out.println("\n Savings account being closed");
+
+                        } else if (closingAccOption.equals("No")){
+                            String closingAccount = scanner.nextLine();
+                            System.out.println("\n Your account will remain open, thank you.");
+                        }
+                    } else if (closingAccOption == 3){
+                        System.out.println("\n We are so sorry that you want to close your investment account.");
+                        System.out.println("\n Are you sure you want to close this account?");
+                        if (closingAccOption.equals("Yes")){
+                            String closingAccount = scanner.nextLine();
+                            System.out.println("\n Investment account being closed");
+
+                        } else if (closingAccOption.equals("No")){
+                            String closingAccount = scanner.nextLine();
+                            System.out.println("\n Your account will remain open, thank you.");
+                        }
+                    } else if (closingAccOption == 4){
+                        // Takes you back to Main menu
+                    }
+                    break;
+                    // Printing receipt
+                case 7:
+                    System.out.println("/n Select which account you would like a receipt for: \n (1) Checking Account \n (2) Savings Account \n (3) Investment Account \n (4) Go back to main menu");
+                    Integer receiptCheckOption = scanner.nextInt();
+
+                    if (receiptCheckOption == 1){
+                        System.out.println("\n Your balance for your checking account is: " + "$" + currentCheckingBalance);
+
+                    } else if (receiptCheckOption == 2){
+                        System.out.println("\n Your balance for your savings account is: " + "$" + currentSavingsBalance);
+
+                    } else if (receiptCheckOption == 3){
+                        System.out.println("\n Your balance for your checking account is: " + "$" + currentCheckingBalance);
+
+                    } else if(receiptCheckOption == 4){
+                        // Go back to Main menu
+                    }
+
+
 
 
             }
@@ -176,7 +238,7 @@ public class Console {
 }
 
 
-
+//
 //        //Sub Menu after password
 //        System.out.println("Welcome back Mr. or Mrs Something! \n" +
 //                "Choose an option from the menu below! \n"
