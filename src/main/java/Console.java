@@ -120,7 +120,34 @@ public class Console {
         Console.print("%s Account was created %s " + account.getName() + users.getUserName());
         }
 
-        public
+    public Integer promptAccount(){
+        Integer accountId = 1;
+        StringBuilder message = new StringBuilder();
+        int iterator = 0;
+        for(int i = 0; i < users.getUserList().get(users.getUserByName(currentUser)).size(); i++){
+            if(users.getUserList().get(users.getUserByName(currentUser)).get(i).getAccountID().equals(accountId)){
+                iterator = i;
+            }
+        }
+        users.getUserList().get(users.getUserByName(currentUser)).get(iterator).deposit();
+
+
+//        Integer accountId;
+//        StringBuilder message = new StringBuilder();
+//        users.getUserList().get(users.getUserByName(currentUser)).forEach((acc) ->{
+//            if (acc.getAccountID().equals())});
+//        for(Integer id : user.getAccountsById()){
+//            Account account = accountMap.getAccountById(id);
+            message.append(String.format("%s : %s\n", id, Account.getName()));
+//        }
+    }
+        message.append("Choose an account to access: ");
+        do {
+        accountId = Console.getIntegerInput(message.toString());
+    } while (!user.getAccountsIds().contains(accountId));
+        return accountId;
+}
+}
 
 
 

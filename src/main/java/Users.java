@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -8,6 +9,10 @@ public class Users {
     private HashMap<Users, ArrayList<Account>> userList = new HashMap<>();
     private String userName = "";
     private ArrayList<Account> userAccs;
+
+    public HashMap<Users, ArrayList<Account>> getUserList(){
+        return userList;
+    }
 
     public Users(){
 
