@@ -32,6 +32,14 @@ public class ConsoleScribbles {//Ideas and scribbles
                 }
 
         }
+        /*int iterator = 0;
+        for(int i = 0; i < user.getUserList().get(user.getUserByName(currentUser)).size(); i++){
+            if(user.getUserList().get(user.getUserByName(currentUser)).get(i).getAccountID() == accountId){
+                iterator = i;
+            }
+        }
+        user.getUserList().get(user.getUserByName(currentUser)).get(iterator).deposit();*/
+
 
     }
 

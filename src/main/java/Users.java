@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 public class Users {
 
@@ -10,19 +8,19 @@ public class Users {
     private ArrayList<Account> userAccs;
 
     public Users(){
-
     }
 
-    public Users(String name){
+    public void createUsers(String name, Users user){
         this.userName = name;
         this.password = generatePas();
+        userList.put(user, userAccs);
     }
 
     public Integer generatePas(){
         Random rnd = new Random();
         int num = rnd.nextInt(999999);
 
-        Integer pass = Integer.parseInt(String.format("%6d", num));
+        Integer pass = Integer.parseInt(String.format("%06d", num));
 
         return pass;
     }
@@ -69,19 +67,27 @@ public class Users {
         return truthy[0];
     }
 
-    public Users getUserByName(String name){
-        Users[] output = new Users[1];
+    public Optional<Users> getUserByName(String name){
 
-        userList.forEach((users, acc) -> {
-            if(users.getUserName().equals(name)) {
-                output[0] = users;
-            }
-        });
-        return output[0];
+        return userList.entrySet().stream().filter(e -> Objects.equals(e.getKey().getUserName(), name)).map(Map.Entry::getKey).findAny();
     }
 
     public void clearAccList(){
         userAccs.clear();
+    }
+
+    public HashMap<Users, ArrayList<Account>> getUserList(){
+        return userList;
+    }
+
+    public Account getAccountById(Integer id, String currentUser){
+        int iterator = 0;
+        for(int i = 0; i < getUserList().get(getUserByName(currentUser)).size(); i++){
+            if(userList.get(getUserByName(currentUser)).get(i).getAccountID().equals(id)){
+                iterator = i;
+            }
+        }
+        return userList.get(getUserByName(currentUser)).get(iterator);
     }
 
 }
