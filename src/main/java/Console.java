@@ -1,5 +1,6 @@
 import java.sql.Connection;
 import java.util.Scanner;
+import java.util.function.Consumer;
 
 public class Console {
     private String currentUser = "";
@@ -8,12 +9,15 @@ public class Console {
 
 
     public void startUpMenu(){
-        loginMenu(Console.getIntegerInput("Welcome to our ATM! \n  " +
-                "1: Log in \n " +
-                "2: Create Account \n" +
-                "3: Quit"));
+        while (true) {
+            loginMenu(Console.getIntegerInput("Welcome to our ATM! \n  " +
+                    "1: Log in \n " +
+                    "2: Create Account \n" +
+                    "3: Quit"));
 
+        }
     }
+
 
     public void loginMenu(Integer userInput){
         switch (userInput){
@@ -40,6 +44,7 @@ public class Console {
                     users.createUser(userName, users);
                     Console.print("Here is your password: " + users.getPassword());
                     this.currentUser = userName;
+                    atmMenu();
 
                 } else {
                     Console.print("Username already exists, please log in.");
@@ -52,10 +57,71 @@ public class Console {
             break;
         }
 
+    }
 
 
+    public void atmMenu(){
+        Boolean looping = true;
+        while (looping) {
+            Console.print("1: Open New Account"
+                    + "\n 2: Check Balance"
+                    + "\n 3: Deposit to Account"
+                    + "\n 4: Withdrawal from Account"
+                    + "\n 5: Transfer to Account"
+                    + "\n 6: Close Account"
+                    + "\n 7: Print Receipt"
+                    + "\n 8: Logout/Switch User");
+            Integer choice = Console.getIntegerInput("Choose an option.");
+            switch (choice) {
+                case 1:
+                    createBankAccount();
+                    break;
+                case 2:
+                    checkBalance();
+                    break;
+                case 3:
+                    deposit();
+                    break;
+                case 4:
+                    withdrawal();
+                    break;
+                case 5:
+                    transfer();
+                    break;
+                case 6:
+                    closeAccount();
+                    break;
+                case 7:
+                    printHistory();
+                    break;
+                case 8:
+                    looping = false;
+                    break;
+                default:
+                    Console.print("Please choose a valid option");
+                    break;
+
+
+            }
+
+        }
 
     }
+
+    public void createBankAccount(){
+        Integer accountType = Console.getIntegerInput("Which type of account? \n" +
+                "1: Checking Account \n" +
+                "2: Savings Account \n" +
+                "3: Investment Account");
+        Double amount = Console.getDoubleInput("How much would you like to deposit?");
+        Account account = accountMap.createAccount(amount, accountType);
+        users.addAccounts(account);
+        users.updateUserAcc(users);
+        Console.print("%s Account was created %s " + account.getName() + users.getUserName());
+        }
+
+        public
+
 
 
     public void startAtm() {
@@ -294,6 +360,13 @@ public class Console {
         Scanner scanner = new Scanner(System.in);
         print(prompt);
         Integer userInput = scanner.nextInt();
+        return userInput;
+    }
+
+    public static Double getDoubleInput(String prompt){
+        Scanner scanner = new Scanner(System.in);
+        print(prompt);
+        Double userInput = scanner.nextDouble();
         return userInput;
     }
 
