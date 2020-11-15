@@ -1,35 +1,55 @@
-import java.util.HashMap;
+import java.util.Scanner;
 
-public class ConsoleIdeas {
+public class ConsoleScribbles {//Ideas and scribbles
 
-   AccountMap accountMap = new AccountMap();
-   private String currentUserName = "";
 
-   //helper function in the console logic that helps to rertrieve the current user from the master list/map of users
-    //in the master list of users we can iterate through it to find the id associated with their account
-    //append their id and name of account to the output message for them to choose an account
-    //they choose the account by inputting the id (id is generated when account is created so it is unique therefore the reason why we need to search for their account and output all of the ids and accounts they have
-    public Integer promptAccount(){
-        Integer accountId;
-        StringBuilder message = new StringBuilder();
+    public void run(){
 
-        User user = userList.getUserByUsername(currentUserName);
 
-        for(Integer id : user.getAccountsById()){
+        System.out.println("░░░░░░░░▄▄▄▀▀▀▄▄███▄░░░░░░░░░░░░░░ " + "\n░░░░░▄▀▀░░░░░░░▐░▀██▌░░░░░░░░░░░░░ \n░░░▄▀░░░░▄▄███░▌▀▀░▀█░░░░░░░░░░░░░ \n" +
+                "░░▄█░░▄▀▀▒▒▒▒▒▄▐░░░░█▌░░░░░░░░░░░░ \n░▐█▀▄▀▄▄▄▄▀▀▀▀▌░░░░░▐█▄░░░░░░░░░░░ \n░▌▄▄▀▀░░░░░░░░▌░░░░▄███████▄░░░░░░ \n" +
+                "░░░░░░░░░░░░░▐░░░░▐███████████▄░░░ \n░░░░░le░░░░░░░▐░░░░▐█████████████▄ \n░░░░toucan░░░░░░▀▄░░░▐█████████████▄ \n" +
+                "░░░░░░has░░░░░░░░▀▄▄███████████████ \n░░░░░arrived░░░░░░░░░░░░█▀██████░░");
 
-            Account account = accountMap.getAccountById(id);
-            message.append(String.format("%s : %s\n", id, Account.getName()));
+        System.out.println("      \\/)/)    \n    _'  oo(_.-.\n  /'.     .---'\n/'-./    (     \n)     ; __\\    \n" +
+                "\\_.'\\ : __|    \n     )  _/     \n    (  (,.     \n     '-.-'");
+
+        Integer inputInt = ConsoleScribbles.getIntegerInput("Welcome, do you have a pre-existing account with us?\n 1. Yes\n 2. No");
+        String inputStr = "";
+
+        Users user = new Users();
+
+        switch(inputInt){
+            case 1:
+                inputStr = ConsoleScribbles.getStringInput("Please enter your username. ");
+                if(user.checkUserName(inputStr)){
+                    inputInt = ConsoleScribbles.getIntegerInput("Please enter your password. ");
+                    if(user.checkPassword(inputInt)){
+                        break;
+                    }
+                    ConsoleScribbles.print("Please enter a valid password. ");
+
+                }
+
         }
 
     }
-        message.append("Choose an account to access: ");
-        do {
-        accountId = Console.getIntegerInput(message.toString());
-    } while (!user.getAccountsIds().contains(accountId));
-        return accountId;
 
+    public static Integer getIntegerInput(String prompt){
+        Scanner scanner = new Scanner(System.in);
+        print(prompt);
+        Integer userInput = scanner.nextInt();
+        return userInput;
     }
 
+    public static void print(String output){
+        System.out.println(output);
+    }
 
-
+    public static String getStringInput(String prompt){
+        Scanner scanner = new Scanner(System.in);
+        print(prompt);
+        String userInput = scanner.next();
+        return userInput;
+    }
 }
