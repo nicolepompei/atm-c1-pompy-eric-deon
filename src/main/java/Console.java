@@ -104,6 +104,7 @@ public class Console {
                     else{Console.print("No bank account IDs found please try again.");}
                     break;
                 case 9:
+                    clearHistory();
                     looping = false;
                     break;
                 default:
@@ -180,6 +181,10 @@ public class Console {
        for(String s : transactionHistory){
            System.out.println(s);
        }
+    }
+
+    public void clearHistory(){
+        transactionHistory.clear();
     }
 
     public Integer promptAccount(){
