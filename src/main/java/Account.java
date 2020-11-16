@@ -26,7 +26,8 @@ public class Account {
     //updates the balance of the current account object by getting it's current balance and adding the amount
     public void deposit(Double amount) {
         if(amount > 0.0){
-        this.setBalance(this.getBalance() + amount, String.format("Deposit to %s ", this.getAccountID()));}
+        this.setBalance(this.getBalance() + amount, String.format("Deposit to %s ", this.getAccountID()));
+        System.out.println("Depositing " + "$" + amount + " into your " + this.getName() + " Account, ID:" + this.getAccountID());}
     else {System.out.println("You cannot deposit a negative number.");}}
 
 //CORE FUNCTIONS OF AN ACCOUNT

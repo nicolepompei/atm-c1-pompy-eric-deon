@@ -137,10 +137,7 @@ public class Console {
         Integer id = promptAccount();
 
         Double deposit = Console.getDoubleInput("Please enter the amount you would like to deposit. ");
-
         bin.getAccountById(id, currentUser).deposit(deposit);
-
-        System.out.println("Depositing " + "$" + deposit + " into your " + bin.getAccountById(id, currentUser).getName() + " Account, ID:" + id);
         newBalancePrompt(id);
         addTransactionHistory("$" + deposit + " has been added to this account: " + id);
     }
