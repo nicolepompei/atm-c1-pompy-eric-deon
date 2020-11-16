@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class ConsoleScribbles {//Ideas and scribbles
-
+/*
 
     public void run(){
 
@@ -51,5 +51,5 @@ public class ConsoleScribbles {//Ideas and scribbles
         print(prompt);
         String userInput = scanner.next();
         return userInput;
-    }
+    }*/
 }

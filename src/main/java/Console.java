@@ -6,26 +6,26 @@ public class Console {
     private String currentUser = "";
     AccountMap accountMap = new AccountMap();
     Users users = new Users();
+    UserBin bin = new UserBin();
 
 
     public void startUpMenu(){
         while (true) {
-            loginMenu(Console.getIntegerInput("Welcome to our ATM! \n  " +
-                    "1: Log in \n " +
+            loginMenu(Console.getIntegerInput("Welcome to our ATM!\n" +
+                    "1: Log in \n" +
                     "2: Create Account \n" +
                     "3: Quit"));
 
         }
     }
 
-
     public void loginMenu(Integer userInput){
         switch (userInput){
             case 1:
                 String userName = Console.getStringInput("Enter username: ");
-                if (users.checkUserName(userName)){
+                if (bin.checkUsername(userName)){
                     Integer password = Console.getIntegerInput("Enter password: ");
-                    if (users.checkPassword(password)){
+                    if (bin.checkPassword(password)){
                         this.currentUser = userName;
                         atmMenu();
 
@@ -40,10 +40,11 @@ public class Console {
                 break;
             case 2:
                 userName = Console.getStringInput("Please enter a username to create your profile.");
-                if (!users.checkUserName(userName)){
-                    users.createUser(userName, users);
+                if (!bin.checkUsername(userName)){
+                    users.createUser(userName);
                     Console.print("Here is your password: " + users.getPassword());
                     this.currentUser = userName;
+                    bin.addUser(users);
                     atmMenu();
 
                 } else {
@@ -63,14 +64,15 @@ public class Console {
     public void atmMenu(){
         Boolean looping = true;
         while (looping) {
-            Console.print("1: Open New Account"
+            Console.print(" 1: Open New Account"
                     + "\n 2: Check Balance"
                     + "\n 3: Deposit to Account"
                     + "\n 4: Withdrawal from Account"
                     + "\n 5: Transfer to Account"
                     + "\n 6: Close Account"
                     + "\n 7: Print Receipt"
-                    + "\n 8: Logout/Switch User");
+                    + "\n 8: Print Account Ids"
+                    + "\n 9: Logout/Switch User");
             Integer choice = Console.getIntegerInput("Choose an option.");
             switch (choice) {
                 case 1:
@@ -95,17 +97,16 @@ public class Console {
                     printHistory();
                     break;
                 case 8:
+                    bin.getUserList().get(bin.getIndexByName(currentUser)).getAccountIds();
+                    break;
+                case 9:
                     looping = false;
                     break;
                 default:
                     Console.print("Please choose a valid option");
                     break;
-
-
             }
-
         }
-
     }
 
     public void createBankAccount(){
@@ -115,274 +116,88 @@ public class Console {
                 "3: Investment Account");
         Double amount = Console.getDoubleInput("How much would you like to deposit?");
         Account account = accountMap.createAccount(amount, accountType);
-        users.addAccounts(account);
-        users.updateUserAcc(users);
-        Console.print("%s Account was created %s " + account.getName() + users.getUserName());
+        bin.getUserList().get(bin.getIndexByName(currentUser)).addAccounts(account);
+        Console.print("%s Account was created %s " + account.getName() + currentUser);
         }
+
+    public void checkBalance() {
+        Integer id = promptAccount();
+
+        System.out.println(bin.getAccountById(id, currentUser).getBalance());
+    }
+
+    public void newBalancePrompt(Integer id){
+        System.out.println("New Balance:" + accountMap.getAccountById(id).getBalance() + "\n\n");
+    }
+
+    public void deposit(){
+        Integer id = promptAccount();
+
+        Double deposit = Console.getDoubleInput("Please enter the amount you would like to deposit. ");
+
+        bin.getAccountById(id, currentUser).deposit(deposit);
+
+        System.out.println("Depositing " + deposit + " into your account.");
+        newBalancePrompt(id);
+    }
+
+    public void withdrawal(){
+        Integer id = promptAccount();
+
+        Double withdrawal = Console.getDoubleInput("Please enter the amount you would like to withdraw. ");
+
+        bin.getAccountById(id, currentUser).withdraw(withdrawal);
+
+        System.out.println("Withdrawing " + withdrawal + " from your account.");
+        newBalancePrompt(id);
+    }
+
+    public void transfer(){
+        Integer id = promptAccount();
+
+        Double transferAmount = Console.getDoubleInput("How much would you like to transfer?");
+
+
+        Integer targetAccountId = Console.getIntegerInput("Select the ID of the account to transfer to:");
+        bin.getAccountById(id, currentUser).transfer(bin.getAccountById(targetAccountId, currentUser), transferAmount);
+
+        System.out.println(transferAmount + " has been transferred to your other account.");
+        newBalancePrompt(targetAccountId);
+    }
+
+    public void closeAccount(){
+        Integer accountId = promptAccount();
+        if(accountMap.getAccountById(accountId).closeAccount()) {
+            bin.removeById(accountId, currentUser);
+        }
+        Console.print("Account successfully removed, sorry not sorry.\n" + "      \\/)/)    \n    _'  oo(_.-.\n  /'.     .---'\n/'-./    (     \n)     ; __\\    \n" +
+                "\\_.'\\ : __|    \n     )  _/     \n    (  (,.     \n     '-.-'");
+    }
+
+    public void printHistory(){
+        Integer accountId = promptAccount();
+        String transactionHistory = accountMap.getAccountById(accountId).getPrintableTransactionHistory();
+        System.out.println(transactionHistory);
+    }
 
     public Integer promptAccount(){
-        Integer accountId = 1;
-        StringBuilder message = new StringBuilder();
-        int iterator = 0;
-        for(int i = 0; i < users.getUserList().get(users.getUserByName(currentUser)).size(); i++){
-            if(users.getUserList().get(users.getUserByName(currentUser)).get(i).getAccountID().equals(accountId)){
-                iterator = i;
+            Integer accountId = Console.getIntegerInput("Please enter the account id you would like to access. ");
+            StringBuilder message = new StringBuilder();
+
+            for(Integer id : bin.getAccountIdList(currentUser)){
+                Account account = accountMap.getAccountById(id);
+                message.append(String.format("%s : %s\n", id, account.getName()));
             }
-        }
-        users.getUserList().get(users.getUserByName(currentUser)).get(iterator).deposit();
 
-
-//        Integer accountId;
-//        StringBuilder message = new StringBuilder();
-//        users.getUserList().get(users.getUserByName(currentUser)).forEach((acc) ->{
-//            if (acc.getAccountID().equals())});
-//        for(Integer id : user.getAccountsById()){
-//            Account account = accountMap.getAccountById(id);
-            message.append(String.format("%s : %s\n", id, Account.getName()));
-//        }
-    }
         message.append("Choose an account to access: ");
         do {
-        accountId = Console.getIntegerInput(message.toString());
-    } while (!user.getAccountsIds().contains(accountId));
+            accountId = Console.getIntegerInput(message.toString());
+        } while (!bin.getAccountIdList(currentUser).contains(accountId));
+
         return accountId;
-}
-}
-
-
-
-    public void startAtm() {
-        Scanner scanner = new Scanner(System.in);
-        boolean atmRunning = true;
-
-        while (atmRunning) {
-            System.out.println("Welcome to our ATM! \n" +
-                    "Choose an option from the menu below! \n"
-                    + "\n 1: Open New Account"  //Create password and ID
-                    + "\n 2: Check Balance" // Enter Password + ID -> Goes to Account Types after entering Password (Checking, Savings, Investment)
-                    + "\n 3: Deposit to Account" // Enter password and ID after to continue
-                    + "\n 4: Withdrawal from Account" // Enter password and ID after to continue
-                    + "\n 5: Transfer to Account" // Enter password + ID
-                    + "\n 6: Close Account" // Enter password + ID -> Which Account would you like to close?
-                    + "\n 7: Print Receipt"); // Enter password + ID -> Press 1, 2, or 3 for which account you want receipt for.
-            // If they don't pick a valid number --- "Invalid option, please try again"
-
-            Integer choice = scanner.nextInt(); // assigning the user's input
-
-            switch (choice) {
-                // Opening New Account options
-                case 1:
-                    System.out.println("\n Select \n (1) to create password \n (2) to create ID \n (3) to add funds (4) to go back to Main Menu");
-                    Integer optionSelection = scanner.nextInt(); // enters option
-
-                    if (optionSelection == 1) {
-                        System.out.println("\n Enter your password here: ");
-                        Integer newPassword = scanner.nextInt();
-                        // newAccount.newPassword(newPassword);
-
-                    } else if (optionSelection == 2) {
-                        System.out.println("\n Enter your ID number here: ");
-                        Integer idNumber = scanner.nextInt();
-                        // newAccount.idNumber(idNumber);
-
-                    } else if (optionSelection == 3) {
-                        System.out.println("\n Deposit amount in your account: ");
-                        Double depositMoney = scanner.nextDouble();
-                        // newAccount.depositMoney(depositMoney);
-                    } else if (optionSelection == 4) {
-                        // Takes you back to Main Menu
-                    }
-                    break;
-                //Checking Balance
-                case 2:
-                    System.out.println("\n Checking Balance for: \n (1) Checking Account \n (2) Savings Account \n (3) Investment Account \n (4) Go back to Main Menu");
-                    Integer balanceCheckingOption = scanner.nextInt(); // enters option
-
-                    if (balanceCheckingOption == 1) {
-                        System.out.println("\n Your Checking Account Balance is: " + "$" + currentCheckingBalance);
-
-                    } else if (balanceCheckingOption == 2) {
-                        System.out.println("\n Your Savings Account Balance is: " + "$" + currentSavingsBalance);
-
-                    } else if (balanceCheckingOption == 3) {
-                        System.out.println("\n Your Investment Account Balance is: " + "$" + currentInvestmentBalance);
-
-                    } else if (balanceCheckingOption == 4) {
-                        // Takes you back to Main Menu
-                    }
-                    break;
-                //Deposit to Account
-                case 3:
-                    System.out.println("\n Deposit money to: \n (1) Checking Account \n (2) Savings Account \n (3) Investment Account \n (4) Go back to Main Menu");
-                    Integer depositOption = scanner.nextInt(); // enters option
-
-                    if (depositOption == 1) {
-                        System.out.println("\n How much would you like to deposit into your checking account?");
-                        Double depositMoney = scanner.nextDouble();
-                        // depositToAccount.depositMoney(depositMoney);
-                        System.out.println("\n Your Checking Account Balance is now: " + "$" + currentCheckingBalance);
-
-                    } else if (depositOption == 2) {
-                        System.out.println("\n How much would you like to deposit into your savings account?");
-                        Double depositMoney = scanner.nextDouble();
-                        // depositToAccount.depositMoney(depositMoney);
-                        System.out.println("\n Your Savings Account Balance is now: " + "$" + currentSavingsBalance);
-
-                    } else if (depositOption == 3) {
-                        System.out.println("\n How much would you like to deposit into your investment account?");
-                        Double depositMoney = scanner.nextDouble();
-                        // depositToAccount.depositMoney(depositMoney);
-                        System.out.println("\n Your Investment Account Balance is now: " + "$" + currentInvestmentBalance);
-                    } else if (depositOption == 4) {
-                        // Takes you back to Main Menu
-                    }
-                    break;
-                //Withdrawal from Account
-                case 4:
-                    System.out.println("\n Withdrawal money from: \n (1) Checking Account \n (2) Savings Account \n (3) Investment Account \n (4) Go back to Main Menu ");
-                    Integer withdrawalOption = scanner.nextInt();
-
-                    if (withdrawalOption == 1) {
-                        System.out.println("\n Your current Checking account balance is: " + "$" + currentCheckingBalance);
-                        System.out.println("\n How much would you like to withdrawal?");
-                        Double withdrawalMoney = scanner.nextDouble();
-                        // withdrawalToAccount.withdrawalMoney(withdrawalMoney);
-                        System.out.println("\n Your Checking Account Balance is now: " + "$" + currentCheckingBalance);
-
-                    } else if (withdrawalOption == 2) {
-                        System.out.println("\n Your current Savings account balance is: " + "$" + currentSavingsBalance);
-                        System.out.println("\n How much would you like to withdrawal?");
-                        Double withdrawalMoney = scanner.nextDouble();
-                        // withdrawalToAccount.withdrawalMoney(withdrawalMoney);
-                        System.out.println("\n Your Savings Account Balance is now: " + "$" + currentSavingsBalance);
-
-                    } else if (withdrawalOption == 3) {
-                        System.out.println("\n Your current Investment account balance is: " + "$" + currentInvestmentBalance);
-                        System.out.println("\n How much would you like to withdrawal?");
-                        Double withdrawalMoney = scanner.nextDouble();
-                        // withdrawalToAccount.withdrawalMoney(withdrawalMoney);
-                        System.out.println("\n Your Investment Account Balance is now: " + "$" + currentInvestmentBalance);
-
-                    } else if (withdrawalOption == 4) {
-                        // Takes you back to Main Menu
-                    }
-                    break;
-                //Transfer across accounts
-                case 5:
-                    System.out.println("\n Transfer money from: \n (1) Checking to Savings Account \n (2) Checking to Investment Account \n (3) Savings to Checking Account \n (4) Savings to Investment Account \n (5) Investment to Checking Account \n (6) Investment to Savings Account \n (7) Go back to Main Menu");
-                    Integer transferOptions = scanner.nextInt();
-
-                    if (transferOptions == 1) {
-                        System.out.println("\n Your current Checking account balance is: " + "$" + currentCheckingBalance);
-                        System.out.println("\n How much would you like to transfer to Savings Account?");
-                        Double transferMoney = scanner.nextDouble();
-                        // transferToAccount.transferMoney(transferMoney);
-                        System.out.println("\n Your Savings Account Balance is now: " + "$" + currentSavingsBalance);
-
-                    } else if (transferOptions == 2) {
-                        System.out.println("\n Your current Checking account balance is: " + "$" + currentCheckingBalance);
-                        System.out.println("\n How much would you like to transfer to Investment Account?");
-                        Double transferMoney = scanner.nextDouble();
-                        // transferToAccount.transferMoney(transferMoney);
-                        System.out.println("\n Your Investment Account Balance is now: " + "$" + currentInvestmentBalance);
-
-                    } else if (transferOptions == 3) {
-                        System.out.println("\n Your current Savings account balance is: " + "$" + currentSavingsBalance);
-                        System.out.println("\n How much would you like to transfer to Checking Account?");
-                        Double transferMoney = scanner.nextDouble();
-                        // transferToAccount.transferMoney(transferMoney);
-                        System.out.println("\n Your Checking Account Balance is now: " + "$" + currentCheckingBalance);
-
-                    } else if (transferOptions == 4) {
-                        System.out.println("\n Your current Savings account balance is: " + "$" + currentSavingsBalance);
-                        System.out.println("\n How much would you like to transfer to Investment Account?");
-                        Double transferMoney = scanner.nextDouble();
-                        // transferToAccount.transferMoney(transferMoney);
-                        System.out.println("\n Your Investment Account Balance is now: " + "$" + currentInvestmentBalance);
-
-                    } else if (transferOptions == 5) {
-                        System.out.println("\n Your current Investment account balance is: " + "$" + currentInvestmentBalance);
-                        System.out.println("\n How much would you like to transfer to Checking Account?");
-                        Double transferMoney = scanner.nextDouble();
-                        // transferToAccount.transferMoney(transferMoney);
-                        System.out.println("\n Your Checking Balance is now: " + "$" + currentCheckingBalance);
-                    } else if (transferOptions == 6) {
-                        System.out.println("\n Your current Investment account balance is: " + "$" + currentInvestmentBalance);
-                        System.out.println("\n How much would you like to transfer to Savings Account?");
-                        Double transferMoney = scanner.nextDouble();
-                        // transferToAccount.transferMoney(transferMoney);
-                        System.out.println("\n Your Savings Account Balance is now: " + "$" + currentSavingsBalance);
-
-                    } else if (transferOptions == 7) {
-                        // Takes you back to Main Menu
-                    }
-                    break;
-                // Close Account
-                case 6:
-                    System.out.println("\n Select which account you would like to close: \n (1) Checking \n (2) Savings Account (3) Investment Account \n (4) Go back to Main Menu");
-                    Integer closingAccOption = scanner.nextInt();
-
-                    if (closingAccOption == 1){
-                        System.out.println("\n We are so sorry that you want to close your checking account.");
-                        System.out.println("\n Are you sure you want to close this account?");
-                        if (closingAccOption.equals("Yes")){
-                            String closingAccount = scanner.nextLine();
-                            System.out.println("\n Checking account being closed");
-
-                        } else if (closingAccOption.equals("No")){
-                            String closingAccount = scanner.nextLine();
-                            System.out.println("\n Your account will remain open, thank you.");
-                        }
-                    } else if (closingAccOption == 2){
-                        System.out.println("\n We are so sorry that you want to close your savings account.");
-                        System.out.println("\n Are you sure you want to close this account?");
-                        if (closingAccOption.equals("Yes")){
-                            String closingAccount = scanner.nextLine();
-                            System.out.println("\n Savings account being closed");
-
-                        } else if (closingAccOption.equals("No")){
-                            String closingAccount = scanner.nextLine();
-                            System.out.println("\n Your account will remain open, thank you.");
-                        }
-                    } else if (closingAccOption == 3){
-                        System.out.println("\n We are so sorry that you want to close your investment account.");
-                        System.out.println("\n Are you sure you want to close this account?");
-                        if (closingAccOption.equals("Yes")){
-                            String closingAccount = scanner.nextLine();
-                            System.out.println("\n Investment account being closed");
-
-                        } else if (closingAccOption.equals("No")){
-                            String closingAccount = scanner.nextLine();
-                            System.out.println("\n Your account will remain open, thank you.");
-                        }
-                    } else if (closingAccOption == 4){
-                        // Takes you back to Main menu
-                    }
-                    break;
-                // Printing receipt
-                case 7:
-                    System.out.println("/n Select which account you would like a receipt for: \n (1) Checking Account \n (2) Savings Account \n (3) Investment Account \n (4) Go back to main menu");
-                    Integer receiptCheckOption = scanner.nextInt();
-
-                    if (receiptCheckOption == 1){
-                        System.out.println("\n Your balance for your checking account is: " + "$" + currentCheckingBalance);
-
-                    } else if (receiptCheckOption == 2){
-                        System.out.println("\n Your balance for your savings account is: " + "$" + currentSavingsBalance);
-
-                    } else if (receiptCheckOption == 3){
-                        System.out.println("\n Your balance for your checking account is: " + "$" + currentCheckingBalance);
-
-                    } else if(receiptCheckOption == 4){
-                        // Go back to Main menu
-                    }
-
-
-
-
-            }
-        }
     }
+
+
     public static Integer getIntegerInput(String prompt){
         Scanner scanner = new Scanner(System.in);
         print(prompt);
