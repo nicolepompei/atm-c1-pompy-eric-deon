@@ -1,6 +1,8 @@
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Users {
@@ -24,12 +26,10 @@ public class Users {
     public Integer generatePas(){
         Random rnd = new Random();
         int num = rnd.nextInt(999999);
-
         Integer pass = Integer.parseInt(String.format("%06d", num));
-
         return pass;
     }
-
+  
     public void getAccountIds(){
         for(int i = 0; i < userAccs.size(); i++) {
             System.out.println(userAccs.get(i).getAccountID());
@@ -61,3 +61,4 @@ public class Users {
     }
 
 }
+

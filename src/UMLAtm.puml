@@ -1,0 +1,51 @@
+@startuml
+Class MainApplication{
+    psvm()
+}
+
+Class Display extends MainApplication{
+    public void run()
+}
+
+Class Console extends Display{
+    public String acceptStringInput()
+    public Integer acceptIntegerInput()
+    public Double acceptDoubleInput()
+}
+
+Class Accounts extends Users{
+    private String accountType
+    private Integer AcctId
+    private Double balance
+
+    public void accountActions() //Various methods that interact with the account
+}
+
+Class Users extends Display{
+    private Integer password
+    private ArrayList<Users> listOfUsers;
+    private String userName
+    private ArrayList<Accounts> userAccounts
+
+    public Users(password)
+    public Integer generatePassword()
+    public void addUsers()
+}
+
+Class Checking extends Accounts{
+    private Double balance
+
+}
+
+Class Savings extends Accounts{
+    private Double balance
+
+}
+
+Class Investment extends Accounts{
+    private Double balance
+
+}
+
+
+@enduml
