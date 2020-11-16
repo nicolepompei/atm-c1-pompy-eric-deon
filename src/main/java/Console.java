@@ -99,7 +99,9 @@ public class Console {
                     printHistory();
                     break;
                 case 8:
-                    bin.getUserList().get(bin.getIndexByName(currentUser)).getAccountIds();
+                    if(!bin.getAccountIdList(currentUser).isEmpty()){
+                    bin.getUserList().get(bin.getIndexByName(currentUser)).getAccountIds();}
+                    else{Console.print("No bank account IDs found please try again.");}
                     break;
                 case 9:
                     looping = false;
@@ -139,7 +141,7 @@ public class Console {
         Double deposit = Console.getDoubleInput("Please enter the amount you would like to deposit. ");
         bin.getAccountById(id, currentUser).deposit(deposit);
         newBalancePrompt(id);
-        addTransactionHistory("$" + deposit + " has been added to this account: " + id);
+        addTransactionHistory("$" + deposit + " has been added to this " + bin.getAccountById(id, currentUser).getName()+ " Account: " + id);
     }
 
     public void withdrawal(){
@@ -159,16 +161,19 @@ public class Console {
         Integer targetAccountId = Console.getIntegerInput("Select the ID of the account to transfer to:");
         bin.getAccountById(id, currentUser).transfer(bin.getAccountById(targetAccountId, currentUser), transferAmount);
         newBalancePrompt(targetAccountId);
-        addTransactionHistory("$" + transferAmount + " has been moved to your " + bin.getAccountById(id, currentUser).getName() + " Accoount ID:" + targetAccountId);
+        addTransactionHistory("$" + transferAmount + " has been transferred to your " + bin.getAccountById(id, currentUser).getName() + " Account ID:" + targetAccountId);
     }
 
     public void closeAccount(){
         Integer accountId = promptAccount();
-        if(accountMap.getAccountById(accountId).closeAccount()) {
+        if(!accountMap.getAccountById(accountId).closeAccount()){
+            Console.print("Please remove all funds from this account.");}
+            else {
             bin.removeById(accountId, currentUser);
+
+            Console.print("Account successfully removed, sorry not sorry.\n" + "      \\/)/)    \n    _'  oo(_.-.\n  /'.     .---'\n/'-./    (     \n)     ; __\\    \n" +
+                    "\\_.'\\ : __|    \n     )  _/     \n    (  (,.     \n     '-.-'");
         }
-        Console.print("Account successfully removed, sorry not sorry.\n" + "      \\/)/)    \n    _'  oo(_.-.\n  /'.     .---'\n/'-./    (     \n)     ; __\\    \n" +
-                "\\_.'\\ : __|    \n     )  _/     \n    (  (,.     \n     '-.-'");
     }
 
     public void printHistory(){
