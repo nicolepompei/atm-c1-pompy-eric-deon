@@ -1,17 +1,19 @@
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.function.Consumer;
 
 public class Console {
     private String currentUser = "";
-    AccountMap accountMap = new AccountMap();
-    Users users = new Users();
-    UserBin bin = new UserBin();
+    private AccountMap accountMap = new AccountMap();
+    private Users users = new Users();
+    private UserBin bin = new UserBin();
+    private ArrayList<String> transactionHistory = new ArrayList<>();
 
 
     public void startUpMenu(){
         while (true) {
-            loginMenu(Console.getIntegerInput("Welcome to our ATM!\n" +
+            loginMenu(Console.getIntegerInput("Welcome to Toucan Sam's ATM!\n" +
                     "1: Log in \n" +
                     "2: Create Account \n" +
                     "3: Quit"));
@@ -117,7 +119,7 @@ public class Console {
         Double amount = Console.getDoubleInput("How much would you like to deposit?");
         Account account = accountMap.createAccount(amount, accountType);
         bin.getUserList().get(bin.getIndexByName(currentUser)).addAccounts(account);
-        Console.print("%s Account was created %s " + account.getName() + currentUser);
+        Console.print(String.format("%s Account was created %s ", account.getName(), currentUser));
         }
 
     public void checkBalance() {
@@ -137,8 +139,9 @@ public class Console {
 
         bin.getAccountById(id, currentUser).deposit(deposit);
 
-        System.out.println("Depositing " + deposit + " into your account.");
+        System.out.println("Depositing " + "$" + deposit + " into your account.");
         newBalancePrompt(id);
+        addTransactionHistory("$" + deposit + " has been added to this account: " + id);
     }
 
     public void withdrawal(){
@@ -148,8 +151,9 @@ public class Console {
 
         bin.getAccountById(id, currentUser).withdraw(withdrawal);
 
-        System.out.println("Withdrawing " + withdrawal + " from your account.");
+        System.out.println("Withdrawing " + "$"+ withdrawal + " from your account.");
         newBalancePrompt(id);
+        addTransactionHistory("$" + withdrawal + " has been removed from this account: " + id);
     }
 
     public void transfer(){
@@ -161,8 +165,9 @@ public class Console {
         Integer targetAccountId = Console.getIntegerInput("Select the ID of the account to transfer to:");
         bin.getAccountById(id, currentUser).transfer(bin.getAccountById(targetAccountId, currentUser), transferAmount);
 
-        System.out.println(transferAmount + " has been transferred to your other account.");
+        System.out.println("$" + transferAmount + " has been transferred to your other account.");
         newBalancePrompt(targetAccountId);
+        addTransactionHistory("$" + transferAmount + " has been moved to this account: " + targetAccountId);
     }
 
     public void closeAccount(){
@@ -175,9 +180,9 @@ public class Console {
     }
 
     public void printHistory(){
-        Integer accountId = promptAccount();
-        String transactionHistory = accountMap.getAccountById(accountId).getPrintableTransactionHistory();
-        System.out.println(transactionHistory);
+       for(String s : transactionHistory){
+           System.out.println(s);
+       }
     }
 
     public Integer promptAccount(){
@@ -222,7 +227,14 @@ public class Console {
         String userInput = scanner.next();
         return userInput;
     }
+
+    public void addTransactionHistory(String transaction){
+        transactionHistory.add(transaction);
+    }
 }
+
+
+
 
 
 //
