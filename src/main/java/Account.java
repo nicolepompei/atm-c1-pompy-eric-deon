@@ -25,9 +25,9 @@ public class Account {
     //verifies that the amount being deposited is greater than 0
     //updates the balance of the current account object by getting it's current balance and adding the amount
     public void deposit(Double amount) {
-        if(amount > 0.0)
-        this.setBalance(this.getBalance() + amount, String.format("Deposit to %s", this.getAccountID()));
-    }
+        if(amount > 0.0){
+        this.setBalance(this.getBalance() + amount, String.format("Deposit to %s ", this.getAccountID()));}
+    else {System.out.println("You cannot deposit a negative number.");}}
 
 //CORE FUNCTIONS OF AN ACCOUNT
 
@@ -39,9 +39,10 @@ public class Account {
     //5.) if the verification of funds fails, print out insufficient funds
     public void transfer(Account transferAccount, Double amount) {
         if (this.balance >= amount && amount > 0) {
-            this.setBalance(this.getBalance() - amount, String.format("Transfer to %s,", transferAccount.getAccountID()));
+            this.setBalance(this.getBalance() - amount, String.format("Transfer to %s ", transferAccount.getAccountID()));
             transferAccount.setBalance(transferAccount.getBalance() + amount, String.format("Transfer from %s", this.getAccountID()));
-         } //else Console.println("Sorry, insufficient funds to complete the transfer.");
+            System.out.println("$" + amount + " has been transferred to your " + transferAccount.getName() + " Account ID: " + accountId);
+         } else System.out.println("You cannot transfer more than you have in your account or transfer a negative number.");
     }
 
     //withdraw money from current account. this method:
@@ -49,8 +50,9 @@ public class Account {
     //2.) sets the new balance of the current account by getting the current balance and subtracting the amount
     public Double withdraw(Double amount) {
         if(amount > 0 && amount <= this.getBalance()){
-            this.setBalance(this.getBalance() - amount, String.format("Withdraw from %s", this.getAccountID()));
-        }
+            this.setBalance(this.getBalance() - amount, String.format("Withdraw from %s ", this.getAccountID()));
+            System.out.println("Withdrawing " + "$"+ amount + " from your account.");
+        } else{System.out.println("You cannot withdraw more than you have in your account or withdraw a negative number. Please try again.");}
         return this.getBalance();
     }
 

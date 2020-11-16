@@ -117,10 +117,11 @@ public class Console {
                 "2: Savings Account \n" +
                 "3: Investment Account");
         Double amount = Console.getDoubleInput("How much would you like to deposit?");
-        Account account = accountMap.createAccount(amount, accountType);
+        if(amount > 0){Account account = accountMap.createAccount(amount, accountType);
         bin.getUserList().get(bin.getIndexByName(currentUser)).addAccounts(account);
         Console.print(String.format("%s Account was created %s ", account.getName(), currentUser));
-        }
+        addTransactionHistory(account.getName() + " Account has been created and $" + amount + " has been added to this account.");
+        } else{Console.print("You cannot deposit a negative amount. Please try that again.");}}
 
     public void checkBalance() {
         Integer id = promptAccount();
@@ -129,7 +130,7 @@ public class Console {
     }
 
     public void newBalancePrompt(Integer id){
-        System.out.println("New Balance:" + accountMap.getAccountById(id).getBalance() + "\n\n");
+        System.out.println("Balance: " + "$" + accountMap.getAccountById(id).getBalance() + "\n\n");
     }
 
     public void deposit(){
@@ -139,7 +140,7 @@ public class Console {
 
         bin.getAccountById(id, currentUser).deposit(deposit);
 
-        System.out.println("Depositing " + "$" + deposit + " into your account.");
+        System.out.println("Depositing " + "$" + deposit + " into your " + bin.getAccountById(id, currentUser).getName() + " Account, ID:" + id);
         newBalancePrompt(id);
         addTransactionHistory("$" + deposit + " has been added to this account: " + id);
     }
@@ -148,26 +149,20 @@ public class Console {
         Integer id = promptAccount();
 
         Double withdrawal = Console.getDoubleInput("Please enter the amount you would like to withdraw. ");
-
         bin.getAccountById(id, currentUser).withdraw(withdrawal);
 
-        System.out.println("Withdrawing " + "$"+ withdrawal + " from your account.");
         newBalancePrompt(id);
-        addTransactionHistory("$" + withdrawal + " has been removed from this account: " + id);
+        addTransactionHistory("$" + withdrawal + " has been removed from your " + bin.getAccountById(id, currentUser).getName() + " Account ID: " + id);
     }
 
     public void transfer(){
         Integer id = promptAccount();
 
         Double transferAmount = Console.getDoubleInput("How much would you like to transfer?");
-
-
         Integer targetAccountId = Console.getIntegerInput("Select the ID of the account to transfer to:");
         bin.getAccountById(id, currentUser).transfer(bin.getAccountById(targetAccountId, currentUser), transferAmount);
-
-        System.out.println("$" + transferAmount + " has been transferred to your other account.");
         newBalancePrompt(targetAccountId);
-        addTransactionHistory("$" + transferAmount + " has been moved to this account: " + targetAccountId);
+        addTransactionHistory("$" + transferAmount + " has been moved to your " + bin.getAccountById(id, currentUser).getName() + " Accoount ID:" + targetAccountId);
     }
 
     public void closeAccount(){
